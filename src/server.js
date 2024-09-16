@@ -10,13 +10,12 @@ const port = process.env.port;
 //config template engine
 configViewEngine(app);
 //config static file
-app.use("/test", webrouter);
+app.use("/", webrouter);
 
 //read database
-connection.query("select * from Users u", function (err, results, fields) {
-  console.log(">>>>results=", results);
-  // console.log(">>>>fields=", fields);
-});
+// connection.query("select * from Users u", function (err, results, fields) {
+//   console.log(">>>>results=", results);
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
