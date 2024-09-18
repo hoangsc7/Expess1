@@ -1,7 +1,7 @@
 //import my sql
 require("dotenv").config();
 
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
 //test connection
 //create connection

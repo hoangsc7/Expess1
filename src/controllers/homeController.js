@@ -1,15 +1,9 @@
-const { getHashes } = require("crypto");
 const connection = require("../config/database");
-const { json } = require("express");
+const { getAllUsers, getUser } = require("../services/CRUDService");
 
-const getHomepage = (req, res) => {
-  let users = [];
-  connection.query("select * from Users u", function (err, results, fields) {
-    users = results;
-    // res.json(users);
-    res.send(JSON.stringify(users));
-    console.log(">>>>results=", results);
-  });
+const getHomepage = async (req, res) => {
+  let result = await getAllUsers();
+  res.render("home.ejs", { listUsers: result });
 };
 const getABC = (req, res) => {
   res.send("check!");
@@ -17,8 +11,41 @@ const getABC = (req, res) => {
 const getHoang = (req, res) => {
   res.render("sample.ejs");
 };
+const getCreateUser = (req, res) => {
+  res.render("create_user.ejs");
+};
+const postCreateUser = async (req, res) => {
+  // let email = req.body.email;
+  // let name = req.body.name;
+  // let city = req.body.city;
+
+  let { email, name, city } = req.body;
+
+  // connection.query(
+  //   `insert into Users (email,name,city) values(?,?,?) `,
+  //   [email, name, city],
+  //   function (err, result) {
+  //     console.log(result);
+  //     res.send("create users succesful");
+  //   }
+  // );
+  let [result, fields] = await connection.query(
+    `insert into Users (email,name,city) values(?,?,?) `,
+    [email, name, city]
+  );
+  // console.log(">>check result:", result);
+  res.send("create users succesful");
+};
+const getUpdatePage = async (req, res) => {
+  const userId = req.params.id;
+  let user = await getUser(userId);
+  res.render("editUser.ejs", { userEdit: user });
+};
 module.exports = {
   getHomepage,
   getABC,
   getHoang,
+  postCreateUser,
+  getCreateUser,
+  getUpdatePage,
 };
