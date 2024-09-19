@@ -1,5 +1,10 @@
 const connection = require("../config/database");
-const { getAllUsers, getUser } = require("../services/CRUDService");
+const {
+  getAllUsers,
+  getUser,
+  updateUserById,
+  deleteUser,
+} = require("../services/CRUDService");
 
 const getHomepage = async (req, res) => {
   let result = await getAllUsers();
@@ -33,13 +38,27 @@ const postCreateUser = async (req, res) => {
     `insert into Users (email,name,city) values(?,?,?) `,
     [email, name, city]
   );
-  // console.log(">>check result:", result);
-  res.send("create users succesful");
+  res.redirect("/");
 };
 const getUpdatePage = async (req, res) => {
   const userId = req.params.id;
   let user = await getUser(userId);
   res.render("editUser.ejs", { userEdit: user });
+};
+const putUpdateUser = async (req, res) => {
+  let { email, name, city, userId } = req.body;
+  await updateUserById(email, name, city, userId);
+  res.redirect("/");
+};
+const delPage = async (req, res) => {
+  const userId = req.params.id;
+  let user = await getUser(userId);
+  res.render("delete.ejs", { userDelete: user });
+};
+const delUser = async (req, res) => {
+  let userId = req.body.userId;
+  await deleteUser(userId);
+  res.redirect("/");
 };
 module.exports = {
   getHomepage,
@@ -48,4 +67,7 @@ module.exports = {
   postCreateUser,
   getCreateUser,
   getUpdatePage,
+  putUpdateUser,
+  delPage,
+  delUser,
 };

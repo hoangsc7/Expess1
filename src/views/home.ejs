@@ -63,7 +63,9 @@
                     <button>
                         <a href="/update-page/<%=user.id %>" style="text-decoration: none;">Edit</a>
                     </button>
-                    <button>Delete</button>
+                    <form action="/delete-user/<%=user.id %>">
+                        <button>Delete</button>
+                    </form>
                 </td>
                 </tr>
                 <% }); %>
